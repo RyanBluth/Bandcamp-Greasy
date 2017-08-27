@@ -14,6 +14,8 @@
         showMoreButton.click();
     }, 2000);
 
+    setInterval(function(){window.scrollTo(0,window.scrollY + 50)}, 1);
+
     setTimeout(function () {
         var dloadLinks = document.getElementsByClassName('redownload-item');
         for (var i in dloadLinks) {
@@ -24,5 +26,5 @@
             } catch (e) {
             }
         }
-    }, 10000);
+    }, 100000);
 })();
