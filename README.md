@@ -9,4 +9,4 @@ A set of [Grease Monkey](https://addons.mozilla.org/en-US/firefox/addon/greasemo
 4. Navigate to your collection on Bandcamp and watch the magic happen
 
 ## Note:
-DownloadCollection.js has a rangeStart and a range end variable. These can be used to download a subset of you collection
+DownloadCollection.js has a rangeStart and a rangeEnd variable. These can be used to download a subset of you collection
