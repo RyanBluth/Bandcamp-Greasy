@@ -7,3 +7,6 @@ A set of [Grease Monkey](https://addons.mozilla.org/en-US/firefox/addon/greasemo
 3. Change the value of format to your desired format(MP3 320 is the default) in DownloadAlbum.js
 3. Make sure Grease Monkey/Tamper Monkey is enabled.
 4. Navigate to your collection on Bandcamp and watch the magic happen
+
+## Note:
+DownloadCollection.js has a rangeStart and a range end variable. These can be used to download a subset of you collection

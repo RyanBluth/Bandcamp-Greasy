@@ -7,6 +7,10 @@
 // @match        https://bandcamp.com/YOUR_USERNAME
 // @grant        GM_openInTab
 // ==/UserScript==
+
+var rangeStart = 0; // Inclusive - Ex: Most recent album would be 0
+var rangeEnd   = Number.MAX_SAFE_INTEGER; // Exclusice - Ex if you have 10 albums and want all of them this value would be 10 since rangeStar is 0 based
+
 (function () {
     'use strict';
     var showMoreButton = document.getElementsByClassName('show-more')[0];
@@ -18,13 +22,12 @@
 
     setTimeout(function () {
         var dloadLinks = document.getElementsByClassName('redownload-item');
-        for (var i in dloadLinks) {
+        for(var i = rangeStart; i < rangeEnd && i < dloadLinks.length; i++){
             try {
                 var a = dloadLinks[i].children[0];
                 var link = a.href;
                 GM_openInTab(link);
-            } catch (e) {
-            }
+            } catch (e) {/*Ignore*/}
         }
-    }, 100000);
+    }, 20000);
 })();
