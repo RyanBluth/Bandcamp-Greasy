@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 var rangeStart = 0; // Inclusive - Ex: Most recent album would be 0
-var rangeEnd   = Number.MAX_SAFE_INTEGER; // Exclusice - Ex if you have 10 albums and want all of them this value would be 10 since rangeStar is 0 based
+var rangeEnd   = Number.MAX_SAFE_INTEGER; // Exclusive - Ex if you have 10 albums and want all of them this value would be 10 since rangeStart is 0 based
 
 (function () {
     'use strict';
@@ -27,7 +27,7 @@ var rangeEnd   = Number.MAX_SAFE_INTEGER; // Exclusice - Ex if you have 10 album
                 var a = dloadLinks[i].children[0];
                 var link = a.href;
                 GM_openInTab(link);
-            } catch (e) {/*Ignore*/}
+            } catch (e) {/* Ignore */}
         }
     }, 20000);
 })();
