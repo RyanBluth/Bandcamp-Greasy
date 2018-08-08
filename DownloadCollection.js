@@ -26,7 +26,7 @@ var rangeEnd   = Number.MAX_SAFE_INTEGER; // Exclusive - Ex if you have 10 album
             try {
                 var a = dloadLinks[i].children[0];
                 var link = a.href;
-                GM_openInTab(link);
+                window.open(link, '_blank');
             } catch (e) {/* Ignore */}
         }
     }, 20000);
