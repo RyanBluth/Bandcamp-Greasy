@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         DownloadCollection
 // @namespace    https://bandcamp.com
-// @version      1.0
+// @version      1.1
 // @description  Opens the download page for each album in your collection
-// @author       Ryan Bluth
+// @author       Ryan Bluth, Xerus2000
 // @match        https://bandcamp.com/YOUR_USERNAME
 // @grant        GM_openInTab
 // ==/UserScript==
@@ -113,6 +113,8 @@ var albumLoadDuration = 10000; // The number of milliseconds spent scrolling dow
         statusSpan.innerText = "Found the following albums:"
         for (var i = 0; i < collectionItems.length; i++) {
             var collectionItem = collectionItems[i];
+            if(collectionItem.getElementsByClassName("redownload-item").length === 0)
+                continue; // skip non-downloads, i.e. subscriptions
             var itemDetails = collectionItem.getElementsByClassName("collection-item-details-container")[0];
             var albumTitle = itemDetails.getElementsByClassName("collection-item-title")[0].innerText;
             var albumArtist = itemDetails.getElementsByClassName("collection-item-artist")[0].innerText;
@@ -124,10 +126,10 @@ var albumLoadDuration = 10000; // The number of milliseconds spent scrolling dow
             includeCheckbox.type = "checkbox";
             includeCheckbox.link = downloadLink;
             albumInfoContainer.appendChild(includeCheckbox);
-            titleArtistSpan.innerText = albumTitle + " " + albumArtist;
+            titleArtistSpan.innerText = allLinks.length + ": " + albumArtist.substring(3) + " - " + albumTitle;
             albumInfoContainer.appendChild(titleArtistSpan);
             mainContainer.appendChild(albumInfoContainer);
-            if (!ignoreDuplicateTitles || (ignoreDuplicateTitles && downloadedItems.indexOf(titleArtistKey) < 0)) {
+            if (!ignoreDuplicateTitles || downloadedItems.indexOf(titleArtistKey) < 0) {
                 allLinks.push(downloadLink);
             }
             downloadedItems.push(titleArtistKey);
