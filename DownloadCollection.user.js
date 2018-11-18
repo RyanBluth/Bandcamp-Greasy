@@ -1,15 +1,17 @@
 // ==UserScript==
-// @name         DownloadCollection
+// @name         Bandcamp Download Collection
 // @namespace    https://bandcamp.com
-// @version      1.1
-// @description  Opens the download page for each album in your collection
+// @version      1.2
+// @description  Opens the download page for each item in your collection.
 // @author       Ryan Bluth, Xerus2000
 // @match        https://bandcamp.com/YOUR_USERNAME
 // @grant        GM_openInTab
 // ==/UserScript==
 
-var ignoreDuplicateTitles = true; // Ignore albums with the same title and artist
-var albumLoadDuration = 10000; // The number of milliseconds spent scrolling down to load all albums
+// Ignore albums with the same title and artist
+var ignoreDuplicateTitles = true;
+// The number of milliseconds spent scrolling down to load all albums
+var albumLoadDuration = 10000;
 
 (function () {
     'use strict';
@@ -17,6 +19,7 @@ var albumLoadDuration = 10000; // The number of milliseconds spent scrolling dow
     var allLinks = [];
 
     var mainContainer = document.createElement('div');
+    mainContainer.setAttribute("oncontextmenu", "this.style.display = 'none';return false;") // close it via rightclick
     mainContainer.style.width = "100%";
     mainContainer.style.backgroundColor = "#1DA0C3";
     mainContainer.style.position = "fixed";
@@ -41,7 +44,7 @@ var albumLoadDuration = 10000; // The number of milliseconds spent scrolling dow
     downloadControls.style.top = "0";
     downloadControls.style.right = "0";
     downloadControls.style.display = "none";
-    
+
     var downloadAllButton = document.createElement("button");
     downloadAllButton.innerText = "Download All";
     downloadAllButton.style.display = "block";
@@ -88,13 +91,13 @@ var albumLoadDuration = 10000; // The number of milliseconds spent scrolling dow
             window.open(allLinks[i], '_blank');
         }
     }
-    
+
     downloadControls.appendChild(downloadAllButton);
     downloadControls.appendChild(downloadSelectedButton);
     downloadControls.appendChild(downloadRangeButton);
     downloadControls.appendChild(downloadRangeStart);
     downloadControls.appendChild(downloadRangeEnd);
-    
+
     mainContainer.appendChild(downloadControls);
     mainContainer.appendChild(statusSpan);
 
@@ -113,8 +116,9 @@ var albumLoadDuration = 10000; // The number of milliseconds spent scrolling dow
         statusSpan.innerText = "Found the following albums:"
         for (var i = 0; i < collectionItems.length; i++) {
             var collectionItem = collectionItems[i];
-            if(collectionItem.getElementsByClassName("redownload-item").length === 0)
+            if(collectionItem.getElementsByClassName("redownload-item").length === 0) {
                 continue; // skip non-downloads, i.e. subscriptions
+            }
             var itemDetails = collectionItem.getElementsByClassName("collection-item-details-container")[0];
             var albumTitle = itemDetails.getElementsByClassName("collection-item-title")[0].innerText;
             var albumArtist = itemDetails.getElementsByClassName("collection-item-artist")[0].innerText;
