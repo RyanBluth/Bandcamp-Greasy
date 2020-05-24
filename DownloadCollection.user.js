@@ -112,7 +112,7 @@ var albumLoadDuration = 10000;
     downloadNextRangeButton.style.marginBottom = "10px"
     downloadNextRangeButton.onclick = () => {
         var rangeStart = parseInt(downloadRangeStart.value)
-        var rangeEnd = Math.min(parseInt(downloadRangeEnd.value), allLinks.length - 1)
+        var rangeEnd = parseInt(downloadRangeEnd.value)
         var limit = rangeEnd - rangeStart + 1
         downloadRangeStart.value = Math.min(rangeEnd + 1, allLinks.length - 1)
         downloadRangeEnd.value = Math.min(rangeEnd + limit, allLinks.length - 1)
