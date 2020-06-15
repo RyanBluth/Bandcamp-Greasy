@@ -20,17 +20,18 @@ var albumLoadDuration = 10000;
 
     var mainContainer = document.createElement('div')
     mainContainer.setAttribute("oncontextmenu", "this.style.display = 'none';return false;") // close it via rightclick
-    mainContainer.style.width = "100%"
     mainContainer.style.backgroundColor = "#1DA0C3"
     mainContainer.style.position = "fixed"
     mainContainer.style.color = "white"
     mainContainer.style.top = "0"
     mainContainer.style.left = "0"
+    mainContainer.style.right = "0"
     mainContainer.style.padding = "20px"
     mainContainer.style.zIndex = "9999999"
-    mainContainer.style.maxHeight = "700px"
+    mainContainer.style.maxHeight = "75vh"
+    mainContainer.style.boxSizing = "border-box"
     mainContainer.style.overflowY = "auto"
-    mainContainer.innerHTML = "<div><h4>BANDCAMP GREASY<h4></div>"
+    mainContainer.innerHTML = '<div><h2><a style="color: inherit" href="https://github.com/RyanBluth/Bandcamp-Greasy">BANDCAMP GREASY</a></h2></div>'
     document.body.appendChild(mainContainer)
 
     var statusSpan = document.createElement('span')
