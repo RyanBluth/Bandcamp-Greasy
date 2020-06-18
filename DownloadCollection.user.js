@@ -88,16 +88,45 @@ var albumLoadDuration = 10000;
     downloadRangeButton.onclick = () => {
         var rangeStart = parseInt(downloadRangeStart.value)
         var rangeEnd = parseInt(downloadRangeEnd.value)
+        var ok = true
+        if (rangeStart < 0 || rangeStart >= allLinks.length) {
+            downloadRangeStart.value = null
+            ok = false
+        }
+        if (rangeEnd < 0 ||  rangeEnd >= allLinks.length) {
+            downloadRangeEnd.value = null
+            ok = false
+        }
+
+        if (!ok) {
+            return
+        }
         for(var i = rangeStart; i <= rangeEnd && i < allLinks.length; i++) {
             window.open(allLinks[i], '_blank')
         }
+        downloadNextRangeButton.style.display = "block"
     }
+
+    var downloadNextRangeButton = document.createElement('button')
+    downloadNextRangeButton.innerText = 'Download next range'
+    downloadNextRangeButton.style.display = "none"
+    downloadNextRangeButton.style.marginBottom = "10px"
+    downloadNextRangeButton.onclick = () => {
+        var rangeStart = parseInt(downloadRangeStart.value)
+        var rangeEnd = parseInt(downloadRangeEnd.value)
+        var limit = rangeEnd - rangeStart + 1
+        downloadRangeStart.value = Math.min(rangeEnd + 1, allLinks.length - 1)
+        downloadRangeEnd.value = Math.min(rangeEnd + limit, allLinks.length - 1)
+        downloadRangeButton.click()
+    }
+
 
     downloadControls.appendChild(downloadAllButton)
     downloadControls.appendChild(downloadSelectedButton)
     downloadControls.appendChild(downloadRangeButton)
     downloadControls.appendChild(downloadRangeStart)
     downloadControls.appendChild(downloadRangeEnd)
+    downloadControls.appendChild(downloadNextRangeButton)
 
     mainContainer.appendChild(downloadControls)
     mainContainer.appendChild(statusSpan)
