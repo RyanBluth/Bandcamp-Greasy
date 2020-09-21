@@ -4,14 +4,29 @@
 // @version      1.2
 // @description  Opens the download page for each item in your collection.
 // @author       Ryan Bluth, Xerus2000
-// @match        https://bandcamp.com/YOUR_USERNAME
+// @match        https://bandcamp.com/USERNAME
 // @grant        GM_openInTab
 // ==/UserScript==
 
 // Ignore albums with the same title and artist
-var ignoreDuplicateTitles = true
+var ignoreDuplicateTitles = true;
 // The number of milliseconds spent scrolling down to load all albums
-var albumLoadDuration = 10000;
+var albumLoadDuration = 30000; //30000 ms default - 30 sec default
+//If true will make the time it takes to open new links entirely random. If false will use a set interval
+const randomInterval = false; 
+//Only applicable if randomInterval is false
+const intervalBetweenDownload = 10000; //10000 ms default - 10 sec default
+//Only applicable if randomInterval is true. The maximum amount of time it will take to download collection.
+const maxDownloadTime = 1800000; //1800000 ms default - 30 min default
+
+function timeoutCalculator (n) {
+  if (randomInterval) {
+    return Math.floor(Math.random() * (maxDownloadTime - 0));
+  }
+  else {
+    return intervalBetweenDownload * n;
+  }
+};
 
 (() => {
     'use strict'
@@ -52,7 +67,10 @@ var albumLoadDuration = 10000;
     downloadAllButton.style.marginBottom = "10px"
     downloadAllButton.onclick = function() {
         for(var i = 0; i < allLinks.length; i++) {
-            window.open(allLinks[i], '_blank')
+          const store = allLinks[i];
+          setTimeout(()=>{
+            window.open(store, '_blank')
+          }, timeoutCalculator(i));
         }
     }
 
@@ -62,10 +80,15 @@ var albumLoadDuration = 10000;
     downloadSelectedButton.style.marginBottom = "10px"
     downloadSelectedButton.onclick = function() {
         var checkboxes = mainContainer.getElementsByTagName("input")
+        let count = -1;
         for(var i = 0; i < checkboxes.length; i++) {
-            if(checkboxes[i].checked) {
-                window.open(checkboxes[i].link, '_blank')
-            }
+          if(checkboxes[i].checked) {
+            const store = checkboxes[i].link;
+            count++;
+            setTimeout(() => {
+                window.open(store, '_blank')
+            }, timeoutCalculator(count));
+          }
         }
     }
 
@@ -88,8 +111,13 @@ var albumLoadDuration = 10000;
     downloadRangeButton.onclick = () => {
         var rangeStart = parseInt(downloadRangeStart.value)
         var rangeEnd = parseInt(downloadRangeEnd.value)
+        let count = -1;
         for(var i = rangeStart; i <= rangeEnd && i < allLinks.length; i++) {
-            window.open(allLinks[i], '_blank')
+            const store = allLinks[i];
+            count++;
+            setTimeout(() => {
+                window.open(store, '_blank')
+            }, timeoutCalculator(count));
         }
     }
 
