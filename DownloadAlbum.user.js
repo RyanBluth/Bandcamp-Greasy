@@ -12,9 +12,9 @@
     'use strict'
     
     // Set preferred download format here
-    var format = "MP3 320"
+    var format = "MP3 V0" 
     // Whether the download tab should automatically be closed after the download has been started
-    var closeAfterDownload = true
+    var closeAfterDownload = false //some weirdo shit happens when this is true. Will need to investigate more
     
     var selectedFormat = false
     setTimeout(() => {
