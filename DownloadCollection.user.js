@@ -4,14 +4,12 @@
 // @version      1.2
 // @description  Opens the download page for each item in your collection.
 // @author       Ryan Bluth, Xerus2000
-// @match        https://bandcamp.com/YOUR_USERNAME
+// @match        https://bandcamp.com/ryanbluth
 // @grant        GM_openInTab
 // ==/UserScript==
 
 // Ignore albums with the same title and artist
-var ignoreDuplicateTitles = true
-// The number of milliseconds spent scrolling down to load all albums
-var albumLoadDuration = 10000;
+var ignoreDuplicateTitles = true;
 
 (() => {
     'use strict'
@@ -50,8 +48,8 @@ var albumLoadDuration = 10000;
     downloadAllButton.innerText = "Download All"
     downloadAllButton.style.display = "block"
     downloadAllButton.style.marginBottom = "10px"
-    downloadAllButton.onclick = function() {
-        for(var i = 0; i < allLinks.length; i++) {
+    downloadAllButton.onclick = function () {
+        for (var i = 0; i < allLinks.length; i++) {
             window.open(allLinks[i], '_blank')
         }
     }
@@ -60,10 +58,10 @@ var albumLoadDuration = 10000;
     downloadSelectedButton.innerText = "Download Selected"
     downloadSelectedButton.style.display = "block"
     downloadSelectedButton.style.marginBottom = "10px"
-    downloadSelectedButton.onclick = function() {
+    downloadSelectedButton.onclick = function () {
         var checkboxes = mainContainer.getElementsByTagName("input")
-        for(var i = 0; i < checkboxes.length; i++) {
-            if(checkboxes[i].checked) {
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
                 window.open(checkboxes[i].link, '_blank')
             }
         }
@@ -88,7 +86,7 @@ var albumLoadDuration = 10000;
     downloadRangeButton.onclick = () => {
         var rangeStart = parseInt(downloadRangeStart.value)
         var rangeEnd = parseInt(downloadRangeEnd.value)
-        for(var i = rangeStart; i <= rangeEnd && i < allLinks.length; i++) {
+        for (var i = rangeStart; i <= rangeEnd && i < allLinks.length; i++) {
             window.open(allLinks[i], '_blank')
         }
     }
@@ -103,41 +101,51 @@ var albumLoadDuration = 10000;
     mainContainer.appendChild(statusSpan)
 
     var showMoreButton = document.getElementsByClassName('show-more')[0]
+  
     setTimeout(() => {
         showMoreButton.click()
+        setTimeout(() => {
+          
+            var scrollInterval = setInterval(() => {
+                window.scrollTo(0, window.scrollY + 1000)
+
+            }, 1)
+
+            var doneInterval = setInterval(() => {
+                var loadMoreContainer = document.getElementsByClassName("expand-container")[0]
+                if (window.getComputedStyle(loadMoreContainer).display === "none") {
+                    downloadControls.style.display = "block"
+                    window.clearInterval(scrollInterval)
+                    window.clearInterval(doneInterval)
+                    var collectionItems = document.getElementsByClassName("collection-item-container")
+                    var downloadedItems = []
+                    statusSpan.innerText = "Found the following albums:"
+                    for (var i = 0; i < collectionItems.length; i++) {
+                        var collectionItem = collectionItems[i]
+                        if (collectionItem.getElementsByClassName("redownload-item").length === 0) {
+                            continue // skip non-downloads, i.e. subscriptions
+                        }
+                        var itemDetails = collectionItem.getElementsByClassName("collection-item-details-container")[0]
+                        var albumTitle = itemDetails.getElementsByClassName("collection-item-title")[0].innerText
+                        var albumArtist = itemDetails.getElementsByClassName("collection-item-artist")[0].innerText
+                        var downloadLink = collectionItem.getElementsByClassName("redownload-item")[0].children[0].href
+                        var titleArtistKey = albumTitle + albumArtist
+                        var albumInfoContainer = document.createElement('div')
+                        var includeCheckbox = document.createElement('input')
+                        var titleArtistSpan = document.createElement('span')
+                        includeCheckbox.type = "checkbox"
+                        includeCheckbox.link = downloadLink
+                        albumInfoContainer.appendChild(includeCheckbox)
+                        titleArtistSpan.innerText = allLinks.length + ": " + albumArtist.substring(3) + " - " + albumTitle
+                        albumInfoContainer.appendChild(titleArtistSpan)
+                        mainContainer.appendChild(albumInfoContainer)
+                        if (!ignoreDuplicateTitles || downloadedItems.indexOf(titleArtistKey) < 0) {
+                            allLinks.push(downloadLink)
+                        }
+                        downloadedItems.push(titleArtistKey)
+                    }
+                }
+            }, 2000)
+        }, 1000)
     }, 2000)
-
-    var scrollInterval = setInterval(() => { window.scrollTo(0, window.scrollY + 50) }, 1)
-
-    setTimeout(() => {
-        downloadControls.style.display = "block"
-        window.clearInterval(scrollInterval)
-        var collectionItems = document.getElementsByClassName("collection-item-container")
-        var downloadedItems = []
-        statusSpan.innerText = "Found the following albums:"
-        for (var i = 0; i < collectionItems.length; i++) {
-            var collectionItem = collectionItems[i]
-            if(collectionItem.getElementsByClassName("redownload-item").length === 0) {
-                continue; // skip non-downloads, i.e. subscriptions
-            }
-            var itemDetails = collectionItem.getElementsByClassName("collection-item-details-container")[0]
-            var albumTitle = itemDetails.getElementsByClassName("collection-item-title")[0].innerText
-            var albumArtist = itemDetails.getElementsByClassName("collection-item-artist")[0].innerText
-            var downloadLink = collectionItem.getElementsByClassName("redownload-item")[0].children[0].href
-            var titleArtistKey = albumTitle + albumArtist
-            var albumInfoContainer = document.createElement('div')
-            var includeCheckbox = document.createElement('input')
-            var titleArtistSpan = document.createElement('span')
-            includeCheckbox.type = "checkbox"
-            includeCheckbox.link = downloadLink
-            albumInfoContainer.appendChild(includeCheckbox)
-            titleArtistSpan.innerText = allLinks.length + ": " + albumArtist.substring(3) + " - " + albumTitle
-            albumInfoContainer.appendChild(titleArtistSpan)
-            mainContainer.appendChild(albumInfoContainer)
-            if (!ignoreDuplicateTitles || downloadedItems.indexOf(titleArtistKey) < 0) {
-                allLinks.push(downloadLink)
-            }
-            downloadedItems.push(titleArtistKey)
-        }
-    }, albumLoadDuration)
 })()
