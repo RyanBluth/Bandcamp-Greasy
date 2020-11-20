@@ -17,7 +17,11 @@ var ignoreDuplicateTitles = true;
     var allLinks = []
 
     var mainContainer = document.createElement('div')
-    mainContainer.setAttribute("oncontextmenu", "this.style.display = 'none';return false;") // close it via rightclick
+    // close it via rightclick
+    mainContainer.oncontextmenu = function (){
+        mainContainer.style.display = 'none';
+        return false;
+    }
     mainContainer.style.backgroundColor = "#1DA0C3"
     mainContainer.style.position = "fixed"
     mainContainer.style.color = "white"
