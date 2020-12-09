@@ -4,7 +4,7 @@
 // @match       https://bandcamp.com/download*
 // @description Downloads the item from the download page. Refreshes if there is an error.
 // @author      Ryan Bluth, Xerus2000
-// @version     1.1
+// @version     1.1.1
 // @grant       none
 // ==/UserScript==
 
@@ -17,8 +17,8 @@
     var closeAfterDownload = true;
     
     var selectedFormat = false;
-    setTimeout(() => {
-        var interval = setInterval(() => {
+    setTimeout(function () {
+        var interval = setInterval(function () {
             if (!selectedFormat) {
                 document.getElementsByClassName('item-format button')[0].click();
                 var spans = document.getElementsByTagName('span');
