@@ -21,7 +21,7 @@
         var interval = setInterval(() => {
             if (!selectedFormat) {
                 document.getElementsByClassName('item-format button')[0].click();
-                var spans = document.getElementsByTagName("span");
+                var spans = document.getElementsByTagName('span');
 
                 for (var i = 0; i < spans.length; i++) {
                   if (spans[i].textContent == format) {
@@ -31,13 +31,13 @@
                   }
                 }
             } else {
-                var errorText = document.getElementsByClassName("error-text")[0];
+                var errorText = document.getElementsByClassName('error-text')[0];
                 if (errorText.offsetParent !== null) {
                     location.reload();
                 }
 
                 try {
-                    var maintenanceLink = document.getElementsByTagName("a")[0];
+                    var maintenanceLink = document.getElementsByTagName('a')[0];
                     if (maintenanceLink.href.indexOf("bandcampstatus") > 0) {
                         location.reload();
                     }

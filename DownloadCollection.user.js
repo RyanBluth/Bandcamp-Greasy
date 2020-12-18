@@ -22,48 +22,48 @@ var ignoreDuplicateTitles = true;
         mainContainer.style.display = 'none';
         return false;
     }
-    mainContainer.style.backgroundColor = "#1DA0C3";
-    mainContainer.style.position = "fixed";
-    mainContainer.style.color = "white";
-    mainContainer.style.top = "0";
-    mainContainer.style.left = "0";
-    mainContainer.style.right = "0";
-    mainContainer.style.padding = "20px";
-    mainContainer.style.zIndex = "9999999";
-    mainContainer.style.maxHeight = "75vh";
-    mainContainer.style.boxSizing = "border-box";
-    mainContainer.style.overflowY = "auto";
+    mainContainer.style.backgroundColor = '#1DA0C3';
+    mainContainer.style.position = 'fixed';
+    mainContainer.style.color = 'white';
+    mainContainer.style.top = '0';
+    mainContainer.style.left = '0';
+    mainContainer.style.right = '0';
+    mainContainer.style.padding = '20px';
+    mainContainer.style.zIndex = '9999999';
+    mainContainer.style.maxHeight = '75vh';
+    mainContainer.style.boxSizing = 'border-box';
+    mainContainer.style.overflowY = 'auto';
     mainContainer.innerHTML = '<div><h2><a style="color: inherit" href="https://github.com/RyanBluth/Bandcamp-Greasy">BANDCAMP GREASY</a></h2></div>';
     document.body.appendChild(mainContainer);
 
     var statusSpan = document.createElement('span');
-    statusSpan.style.fontWeight = "bold";
+    statusSpan.style.fontWeight = 'bold';
     statusSpan.innerText = "Loading albums...";
 
-    var downloadControls = document.createElement("div");
-    downloadControls.style.position = "fixed";
-    downloadControls.style.padding = "20px";
-    downloadControls.style.color = "black";
-    downloadControls.style.top = "0";
-    downloadControls.style.right = "0";
-    downloadControls.style.display = "none";
+    var downloadControls = document.createElement('div');
+    downloadControls.style.position = 'fixed';
+    downloadControls.style.padding = '20px';
+    downloadControls.style.color = 'black';
+    downloadControls.style.top = '0';
+    downloadControls.style.right = '0';
+    downloadControls.style.display = 'none';
 
-    var downloadAllButton = document.createElement("button");
+    var downloadAllButton = document.createElement('button');
     downloadAllButton.innerText = "Download All";
-    downloadAllButton.style.display = "block";
-    downloadAllButton.style.marginBottom = "10px";
+    downloadAllButton.style.display = 'block';
+    downloadAllButton.style.marginBottom = '10px';
     downloadAllButton.onclick = function () {
         for (var i = 0; i < allLinks.length; i++) {
             window.open(allLinks[i], '_blank');
         }
     }
 
-    var downloadSelectedButton = document.createElement("button");
+    var downloadSelectedButton = document.createElement('button');
     downloadSelectedButton.innerText = "Download Selected";
-    downloadSelectedButton.style.display = "block";
-    downloadSelectedButton.style.marginBottom = "10px";
+    downloadSelectedButton.style.display = 'block';
+    downloadSelectedButton.style.marginBottom = '10px';
     downloadSelectedButton.onclick = function () {
-        var checkboxes = mainContainer.getElementsByTagName("input");
+        var checkboxes = mainContainer.getElementsByTagName('input');
         for (var i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 window.open(checkboxes[i].link, '_blank');
@@ -71,22 +71,22 @@ var ignoreDuplicateTitles = true;
         }
     }
 
-    var downloadRangeStart = document.createElement("input");
-    downloadRangeStart.type = "text";
-    downloadRangeStart.style.display = "block";
-    downloadRangeStart.style.marginBottom = "10px";
+    var downloadRangeStart = document.createElement('input');
+    downloadRangeStart.type = 'text';
+    downloadRangeStart.style.display = 'block';
+    downloadRangeStart.style.marginBottom = '10px';
     downloadRangeStart.placeholder = "Range Start";
 
-    var downloadRangeEnd = document.createElement("input");
-    downloadRangeEnd.type = "text";
-    downloadRangeEnd.style.display = "block";
-    downloadRangeEnd.style.marginBottom = "10px";
+    var downloadRangeEnd = document.createElement('input');
+    downloadRangeEnd.type = 'text';
+    downloadRangeEnd.style.display = 'block';
+    downloadRangeEnd.style.marginBottom = '10px';
     downloadRangeEnd.placeholder = "Range End";
 
-    var downloadRangeButton = document.createElement("button");
+    var downloadRangeButton = document.createElement('button');
     downloadRangeButton.innerText = "Download Range";
-    downloadRangeButton.style.display = "block";
-    downloadRangeButton.style.marginBottom = "10px";
+    downloadRangeButton.style.display = 'block';
+    downloadRangeButton.style.marginBottom = '10px';
     downloadRangeButton.onclick = () => {
         var rangeStart = parseInt(downloadRangeStart.value);
         var rangeEnd = parseInt(downloadRangeEnd.value);
@@ -115,28 +115,28 @@ var ignoreDuplicateTitles = true;
             }, 1);
 
             var doneInterval = setInterval(() => {
-                var loadMoreContainer = document.getElementsByClassName("expand-container")[0];
-                if (window.getComputedStyle(loadMoreContainer).display === "none") {
-                    downloadControls.style.display = "block";
+                var loadMoreContainer = document.getElementsByClassName('expand-container')[0];
+                if (window.getComputedStyle(loadMoreContainer).display === 'none') {
+                    downloadControls.style.display = 'block';
                     window.clearInterval(scrollInterval);
                     window.clearInterval(doneInterval);
-                    var collectionItems = document.getElementsByClassName("collection-item-container");
+                    var collectionItems = document.getElementsByClassName('collection-item-container');
                     var downloadedItems = [];
                     statusSpan.innerText = "Found the following albums:";
                     for (var i = 0; i < collectionItems.length; i++) {
                         var collectionItem = collectionItems[i];
-                        if (collectionItem.getElementsByClassName("redownload-item").length === 0) {
+                        if (collectionItem.getElementsByClassName('redownload-item').length === 0) {
                             continue; // skip non-downloads, i.e. subscriptions
                         }
-                        var itemDetails = collectionItem.getElementsByClassName("collection-item-details-container")[0];
-                        var albumTitle = itemDetails.getElementsByClassName("collection-item-title")[0].innerText;
-                        var albumArtist = itemDetails.getElementsByClassName("collection-item-artist")[0].innerText;
-                        var downloadLink = collectionItem.getElementsByClassName("redownload-item")[0].children[0].href;
+                        var itemDetails = collectionItem.getElementsByClassName('collection-item-details-container')[0];
+                        var albumTitle = itemDetails.getElementsByClassName('collection-item-title')[0].innerText;
+                        var albumArtist = itemDetails.getElementsByClassName('collection-item-artist')[0].innerText;
+                        var downloadLink = collectionItem.getElementsByClassName('redownload-item')[0].children[0].href;
                         var titleArtistKey = albumTitle + albumArtist;
                         var albumInfoContainer = document.createElement('div');
                         var includeCheckbox = document.createElement('input');
                         var titleArtistSpan = document.createElement('span');
-                        includeCheckbox.type = "checkbox";
+                        includeCheckbox.type = 'checkbox';
                         includeCheckbox.link = downloadLink;
                         albumInfoContainer.appendChild(includeCheckbox);
                         titleArtistSpan.innerText = allLinks.length + ": " + albumArtist.substring(3) + " - " + albumTitle;
