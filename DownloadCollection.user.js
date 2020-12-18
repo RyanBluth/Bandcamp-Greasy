@@ -18,7 +18,7 @@ var ignoreDuplicateTitles = true;
 
     var mainContainer = document.createElement('div')
     // close it via rightclick
-    mainContainer.oncontextmenu = function (){
+    mainContainer.oncontextmenu = function () {
         mainContainer.style.display = 'none';
         return false;
     }
@@ -112,7 +112,6 @@ var ignoreDuplicateTitles = true;
           
             var scrollInterval = setInterval(() => {
                 window.scrollTo(0, window.scrollY + 1000)
-
             }, 1)
 
             var doneInterval = setInterval(() => {

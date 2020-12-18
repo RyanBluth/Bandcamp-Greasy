@@ -19,7 +19,7 @@
     var selectedFormat = false
     setTimeout(() => {
         var interval = setInterval(() => {
-            if(!selectedFormat){
+            if (!selectedFormat) {
                 document.getElementsByClassName('item-format button')[0].click()
                 var spans = document.getElementsByTagName("span")
 
@@ -49,7 +49,7 @@
                 if (titleLabel.children[0].href !== undefined && titleLabel.children[0].href.length > 0) {
                     window.open(titleLabel.children[0].href)
                     clearTimeout(interval)
-                    if(closeAfterDownload) {
+                    if (closeAfterDownload) {
                         close()
                     }
                 }
