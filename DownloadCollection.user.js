@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bandcamp Download Collection
 // @namespace    https://bandcamp.com
-// @version      1.3
+// @version      1.4
 // @description  Opens the download page for each item in your collection.
 // @author       Ryan Bluth, Xerus2000, bb010g
 // @match        https://bandcamp.com/YOUR_USERNAME
@@ -10,6 +10,10 @@
 
 // Ignore albums with the same title and artist
 var ignoreDuplicateTitles = true;
+
+var throttleDownloads = false;
+
+var throttleDownloadInterval = 5;
 
 (function () {
     'use strict';
@@ -79,7 +83,7 @@ var ignoreDuplicateTitles = true;
             font-weight: bold;
         }
         #bandcamp-greasy .controls {
-            color: black;
+            color: white;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
@@ -93,6 +97,7 @@ var ignoreDuplicateTitles = true;
         #bandcamp-greasy .controls > * {
             display: block;
             margin-bottom: 10px;
+            margin-right: 5px;
         }
         #bandcamp-greasy .album-infos .album-info input[type="checkbox"]:disabled ~ .item {
             text-decoration: line-through;
@@ -192,13 +197,21 @@ var ignoreDuplicateTitles = true;
             element('ol', {className: 'album-infos', start: 0}),
             element('div', {className: 'controls'}, [
                 element('button', {className: 'download-all', textContent: "Download all"}, [], {onclick: {value(e) {
-                    for (var link of e.target.parentNode.parentNode.querySelectorAll('.album-infos .album-info input[type="checkbox"]:enabled ~ a.download')) {
-                        window.open(link.href, '_blank');
+                    let i = 0;
+                    for (let link of e.target.parentNode.parentNode.querySelectorAll('.album-infos .album-info input[type="checkbox"]:enabled ~ a.download')) {
+                        window.setTimeout(() => {
+                            window.open(link.href, '_blank'); 
+                        }, throttleDownloads ? i * throttleDownloadInterval * 1000 : 0);
+                        i++;
                     }
                 }}}),
                 element('button', {className: 'download-selected', textContent: "Download selected"}, [], {onclick: {value(e) {
-                    for (var link of e.target.parentNode.parentNode.querySelectorAll('.album-infos .album-info input[type="checkbox"]:enabled:checked ~ a.download')) {
-                        window.open(link.href, '_blank');
+                    let i = 0;
+                    for (let link of e.target.parentNode.parentNode.querySelectorAll('.album-infos .album-info input[type="checkbox"]:enabled:checked ~ a.download')) {
+                        window.setTimeout(() => {
+                            window.open(link.href, '_blank'); 
+                        }, throttleDownloads ? i * throttleDownloadInterval * 1000 : 0);
+                        i++;
                     }
                 }}}),
                 element('input', {type: 'text', className: 'download-range range-start', placeholder: "Range start"}),
@@ -208,10 +221,27 @@ var ignoreDuplicateTitles = true;
                     var albumInfos = parent.parentNode.querySelectorAll('.album-infos > li');
                     var rangeStart = parseInt(parent.querySelector('.download-range.range-start').value);
                     var rangeEnd = parseInt(parent.querySelector('.download-range.range-end').value);
-                    for (var i = rangeStart; i <= rangeEnd && i < albumInfos.length; i++) {
-                        var link = albumInfos[i].querySelector('input[type="checkbox"]:enabled ~ a.download');
-                        if (link != null) { window.open(link.href, '_blank'); }
+                    for (let i = rangeStart; i <= rangeEnd && i < albumInfos.length; i++) {
+                        let link = albumInfos[i].querySelector('input[type="checkbox"]:enabled ~ a.download');
+                        if (link != null) { 
+                            window.setTimeout(function () {
+                                window.open(link.href, '_blank'); 
+                            }, throttleDownloads ? i * throttleDownloadInterval * 1000 : 0);
+                        }
                     }
+                }}})
+            ]),
+            element('div', {className: 'controls'}, [
+                element('label', {for: 'throttle-checkbox', textContent: 'Throttle Download Rate'}, []),
+                element('input', {type: 'checkbox', 'name': 'throttle-checkbox', checked: throttleDownloads}, [], { onchange: { value(e) {
+                    throttleDownloads = e.currentTarget.checked;
+                }}}),
+                
+            ]),
+            element('div', {className: 'controls'}, [
+                element('label', {for: 'throttle-interval', textContent: 'Throttle Interval'}, []),
+                element('input', {type: 'number', 'name': 'throttle-interval', 'step': 1, value: throttleDownloadInterval}, [], { oninput: { value(e) {
+                    throttleDownloadInterval = Number(e.currentTarget.value)
                 }}}),
             ]),
         ]),
