@@ -221,12 +221,14 @@ var throttleDownloadInterval = 5;
                     var albumInfos = parent.parentNode.querySelectorAll('.album-infos > li');
                     var rangeStart = parseInt(parent.querySelector('.download-range.range-start').value);
                     var rangeEnd = parseInt(parent.querySelector('.download-range.range-end').value);
+                    var throttleIndex = 0;
                     for (let i = rangeStart; i <= rangeEnd && i < albumInfos.length; i++) {
                         let link = albumInfos[i].querySelector('input[type="checkbox"]:enabled ~ a.download');
                         if (link != null) { 
                             window.setTimeout(function () {
                                 window.open(link.href, '_blank'); 
-                            }, throttleDownloads ? i * throttleDownloadInterval * 1000 : 0);
+                            }, throttleDownloads ? throttleIndex * throttleDownloadInterval * 1000 : 0);
+                            throttleIndex++;
                         }
                     }
                 }}})
