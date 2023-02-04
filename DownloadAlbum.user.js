@@ -47,10 +47,10 @@
 
                 var titleLabel = document.getElementsByClassName('download-title')[0];
                 if (titleLabel.children[0].href !== undefined && titleLabel.children[0].href.length > 0) {
-                    window.open(titleLabel.children[0].href);
+                    window.open(titleLabel.children[0].href, "_self");
                     clearTimeout(interval);
                     if (closeAfterDownload) {
-                        close();
+                        setTimeout(function() {close()}, 20000);
                     }
                 }
             }
