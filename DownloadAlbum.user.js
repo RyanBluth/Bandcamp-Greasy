@@ -3,8 +3,8 @@
 // @namespace   https://bandcamp.com
 // @match       https://bandcamp.com/download*
 // @description Downloads the item from the download page. Refreshes if there is an error.
-// @author      Ryan Bluth, Xerus2000
-// @version     1.1.1
+// @author      Ryan Bluth, Xerus2000, Kélian Steffe
+// @version     1.2
 // @grant       none
 // ==/UserScript==
 
@@ -20,12 +20,11 @@
     setTimeout(function () {
         var interval = setInterval(function () {
             if (!selectedFormat) {
-                document.getElementsByClassName('item-format button')[0].click();
-                var spans = document.getElementsByTagName('span');
+                var options = document.getElementsByTagName("option");
 
-                for (var i = 0; i < spans.length; i++) {
-                  if (spans[i].textContent == format) {
-                    spans[i].parentElement.click();
+              	for(var option of options) {
+                  if(option.textContent.split(" - ")[0] == format) {
+                    option.selected = true;
                     selectedFormat = true;
                     break;
                   }
@@ -45,15 +44,29 @@
                     console.log(e);
                 }
 
-                var titleLabel = document.getElementsByClassName('download-title')[0];
-                if (titleLabel.children[0].href !== undefined && titleLabel.children[0].href.length > 0) {
-                    window.open(titleLabel.children[0].href);
+                var titleLabel = document.getElementsByClassName('download-format-tmp')[0].children[4];
+                if (titleLabel.href !== undefined && titleLabel.href.length > 0) {
+                    const downloadWindow = window.open(titleLabel.href);
                     clearTimeout(interval);
+                  
                     if (closeAfterDownload) {
-                        close();
+                      	// Wait for the download window to close itself before closing the album page
+                      	setTimeout(function(){
+                        		var downloadInterval = setInterval(function () {
+                            	try {
+                                	// downloadWindow should throw an error either way since it become a DeadObject once closed
+                                	if(downloadWindow.closed) {
+                                  	throw new Error('Download window is closed');
+                                  }
+                              } catch(e) {
+                              		clearTimeout(downloadInterval);
+                                	close();
+                              }
+                            }, 1000);
+                        }, 1000);
                     }
                 }
             }
-        }, 2000);
-    }, 2000);
+        }, 1000);
+    }, 1000);
 })();
