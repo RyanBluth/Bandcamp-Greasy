@@ -3,8 +3,8 @@
 // @namespace   https://bandcamp.com
 // @match       https://bandcamp.com/download*
 // @description Downloads the item from the download page. Refreshes if there is an error.
-// @author      Ryan Bluth, Xerus2000, Kélian Steffe
-// @version     1.2
+// @author      Ryan Bluth, Xerus2000, Kélian Steffe, Cook I.T!
+// @version     1.2.1
 // @grant       none
 // ==/UserScript==
 
@@ -25,6 +25,7 @@
               	for(var option of options) {
                   if(option.textContent.split(" - ")[0] == format) {
                     option.selected = true;
+                    option.parentNode.dispatchEvent(new Event('change'));
                     selectedFormat = true;
                     break;
                   }
