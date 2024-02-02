@@ -24,8 +24,10 @@
 
               	for(var option of options) {
                   if(option.textContent.split(" - ")[0] == format) {
-                    option.selected = true;
-                    option.parentNode.dispatchEvent(new Event('change'));
+                    if(option.selected != true) {
+                        option.selected = true;
+                        option.parentNode.dispatchEvent(new Event('change'));
+                    }
                     selectedFormat = true;
                     break;
                   }
