@@ -47,9 +47,9 @@
                     console.log(e);
                 }
 
-                var titleLabel = document.getElementsByClassName('download-format-tmp')[0].children[4];
-                if (titleLabel.href !== undefined && titleLabel.href.length > 0) {
-                    const downloadWindow = window.open(titleLabel.href);
+                var downloadLink = document.querySelector('a[data-bind*="downloadUrl"]');
+                if (downloadLink && downloadLink.href && downloadLink.href.length > 0) {
+                    const downloadWindow = window.open(downloadLink.href);
                     clearTimeout(interval);
                   
                     if (closeAfterDownload) {
